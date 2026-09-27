@@ -103,21 +103,38 @@ User ||--o{ PasswordResetToken : resets_with
 
 ## Environment Setup
 
-The API reads its environment from `apps/api/.env`. Start by copying the committed example:
+Create these two local environment files:
+
+1. `apps/api/.env` for the API and its private credentials.
+2. `apps/web/.env` for the web app's optional API URL.
+
+### API: `apps/api/.env`
+
+Copy the complete API template, then replace its placeholder values:
 
 ```powershell
 Copy-Item apps/api/.env.example apps/api/.env
 ```
 
-Set `MONGODB_URI` to your local MongoDB URL or Atlas connection string. Generate two different JWT secrets (each at least 32 characters) with this command, running it twice:
+The template lists all API settings, including `NODE_ENV`, `PORT`, `CLIENT_URL`, `WORKER_ENABLED`, `MONGODB_URI`, JWT settings, AI provider and keys, file limits, queue settings, usage limits, and logging. Set `MONGODB_URI` to your local MongoDB URL or Atlas connection string. Generate two different JWT secrets (each at least 32 characters) with this command, running it twice:
 
 ```powershell
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-Paste the generated values into `JWT_ACCESS_SECRET` and `JWT_REFRESH_SECRET`. For real AI-generated results, set `AI_PROVIDER` to `gemini` or `openai` and provide the matching API key. Keep `.env` private; only `.env.example` belongs in Git.
+Paste the generated values into `JWT_ACCESS_SECRET` and `JWT_REFRESH_SECRET`. For real AI-generated results, set `AI_PROVIDER` to `gemini` or `openai` and provide the matching `GEMINI_API_KEY` or `OPENAI_API_KEY`. For local setup without an AI key, leave `AI_PROVIDER=mock` and both API key values blank.
 
-The web app uses the Vite development proxy by default, so no web `.env` file is needed for local development. `VITE_API_URL` is optional when the API is hosted separately; set it to the API origin without `/api/v1` (for example, `https://api.example.com`).
+### Web: `apps/web/.env`
+
+Create this file with the following line:
+
+```dotenv
+VITE_API_URL=
+```
+
+Leave the value empty for local development; Vite then uses its `/api` proxy to reach the API at `http://localhost:5000`. If the API is hosted separately, set `VITE_API_URL` to its origin without `/api/v1` (for example, `https://api.example.com`). `VITE_` values are included in browser code, so never put API keys or other secrets in this file.
+
+Both `.env` files are ignored by Git. Keep credentials only in these local files; commit the safe `apps/api/.env.example` template, never your `.env` files.
 
 ## Run Locally
 
