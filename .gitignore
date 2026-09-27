@@ -2,6 +2,7 @@ node_modules/
 dist/
 .env
 .env.*
+!apps/api/.env.example
 apps/api/.env
 coverage/
 apps/api/temp/*
