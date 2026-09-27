@@ -5,14 +5,18 @@ import { FileCard } from '../../components/upload/FileCard';
 import { SummaryModeSelector, type SummarySettings } from '../../components/upload/SummaryModeSelector';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { useUpload } from '../../hooks/useUpload';
+import { useAuthStore } from '../../store/auth.store';
 
 export default function UploadPage() {
     const { state, select, upload, cancel, reset } = useUpload();
-    const [settings, setSettings] = useState<SummarySettings>({
-        mode: 'quick',
-        length: 'medium',
-        language: 'en',
-    });
+    const preferences = useAuthStore((store) => store.user?.preferences);
+    const [settings, setSettings] = useState<SummarySettings>(() => ({
+        mode: typeof preferences?.defaultSummaryMode === 'string' ? preferences.defaultSummaryMode : 'quick',
+        length: preferences?.defaultLength === 'short' || preferences?.defaultLength === 'detailed'
+            ? preferences.defaultLength
+            : 'medium',
+        language: typeof preferences?.defaultLanguage === 'string' ? preferences.defaultLanguage : 'en',
+    }));
     const navigate = useNavigate();
 
     const handleUpload = async () => {

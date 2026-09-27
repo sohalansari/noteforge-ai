@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, MessageCircleQuestion } from 'lucide-react';
 import { useNotes } from '../../hooks/useNotes';
 import { NotesRenderer } from '../../components/notes/NotesRenderer';
 import { TableOfContents } from '../../components/notes/TableOfContents';
 import { NotesToolbar } from '../../components/notes/NotesToolbar';
 import { notesApi } from '../../api/notes.api';
+import { exportNotesAsMarkdown } from '../../services/export.service';
 
 export default function NotesPage() {
     const { id } = useParams<{ id: string }>();
@@ -108,11 +109,15 @@ export default function NotesPage() {
                         <span className="font-medium">{note.language}</span>
                     </p>
                 </div>
-                <NotesToolbar
-                    note={note}
-                    onToggleFavorite={handleToggleFavorite}
-                    onCopyAll={handleCopyAll}
-                />
+                <div className="flex flex-wrap items-center gap-2">
+                    <Link to={`/app/documents/${id}/chat`} className="btn-secondary"><MessageCircleQuestion size={16} /> Ask this document</Link>
+                    <NotesToolbar
+                        note={note}
+                        onToggleFavorite={handleToggleFavorite}
+                        onCopyAll={handleCopyAll}
+                        onExport={() => exportNotesAsMarkdown(note, summary)}
+                    />
+                </div>
             </div>
 
             {/* Summary card */}

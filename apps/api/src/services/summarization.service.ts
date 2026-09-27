@@ -2,6 +2,7 @@ import { getAIProvider } from '../ai/providerFactory.js';
 import {
     AIChunkSummarySchema,
     AIFullNotesSchema,
+    type AIChunkSummary,
     type AIFullNotes,
 } from '../ai/schema/notes.schema.js';
 import { SYSTEM_PROMPT } from '../ai/prompts/systemPrompt.js';
@@ -114,7 +115,7 @@ export class SummarizationService {
             for (let attempt = 1; attempt <= CHUNK_RETRY_ATTEMPTS; attempt++) {
                 const t = withTimeout(opts.signal, PER_CALL_TIMEOUT_MS);
                 try {
-                    const result = await ai.generateJSON({
+                    const result = await ai.generateJSON<AIChunkSummary>({
                         system: SYSTEM_PROMPT,
                         user: chunkSummaryPrompt(
                             combined,
@@ -127,9 +128,8 @@ export class SummarizationService {
                         signal: t.signal,
                     });
                     aiRequests += 1;
-                    batchSummary =
-                        result.summary +
-                        (result.keyPoints.length ? '\n- ' + result.keyPoints.join('\n- ') : '');
+                    const keyPoints = result.keyPoints ?? [];
+                    batchSummary = result.summary + (keyPoints.length ? '\n- ' + keyPoints.join('\n- ') : '');
                     break;
                 } catch (err) {
                     lastErr = err;
@@ -201,7 +201,7 @@ export class SummarizationService {
         for (let attempt = 1; attempt <= FINAL_RETRY_ATTEMPTS; attempt++) {
             const t = withTimeout(opts.signal, PER_CALL_TIMEOUT_MS);
             try {
-                const notes = await ai.generateJSON({
+                const notes = await ai.generateJSON<AIFullNotes>({
                     system: SYSTEM_PROMPT,
                     user: prompt,
                     schema: AIFullNotesSchema,

@@ -1,4 +1,4 @@
-import type { ZodSchema } from 'zod';
+import type { ZodType } from 'zod';
 
 /**
  * Options for JSON-returning AI calls.
@@ -8,7 +8,7 @@ import type { ZodSchema } from 'zod';
 export interface GenerateJSONOptions<T> {
     system: string;
     user: string;
-    schema: ZodSchema<T>;
+    schema: ZodType<T, any, any>;
     maxTokens?: number;
     temperature?: number;
     signal?: AbortSignal;

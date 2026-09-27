@@ -27,4 +27,17 @@ export const authApi = {
         const res = await api.get('/users/me');
         return res.data.data as { user: ApiUser };
     },
+    async updateMe(input: { name: string; avatar: string | null }) {
+        const res = await api.patch('/users/me', input);
+        return res.data.data as { user: ApiUser };
+    },
+    async forgotPassword(email: string) {
+        await api.post('/auth/forgot-password', { email });
+    },
+    async resetPassword(token: string, password: string) {
+        await api.post('/auth/reset-password', { token, password });
+    },
+    async verifyEmail(token: string) {
+        await api.post('/auth/verify-email', { token });
+    },
 };

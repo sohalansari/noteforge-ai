@@ -1,4 +1,4 @@
-import { Copy, Printer, Star, Check } from 'lucide-react';
+import { Copy, Download, Printer, Star, Check } from 'lucide-react';
 import { useState } from 'react';
 import type { ApiNote } from '../../api/notes.api';
 
@@ -6,10 +6,12 @@ export function NotesToolbar({
     note,
     onToggleFavorite,
     onCopyAll,
+    onExport,
 }: {
     note: ApiNote;
     onToggleFavorite: () => void;
     onCopyAll: () => void;
+    onExport: () => void;
 }) {
     const [copied, setCopied] = useState(false);
 
@@ -25,6 +27,7 @@ export function NotesToolbar({
                 {copied ? <Check size={16} /> : <Copy size={16} />}
                 {copied ? 'Copied!' : 'Copy all'}
             </button>
+            <button className="btn-secondary" onClick={onExport} title="Download Markdown"><Download size={16} /> Export</button>
             <button className="btn-secondary" onClick={() => window.print()}>
                 <Printer size={16} /> Print
             </button>

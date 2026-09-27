@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../../api/auth.api';
 import { useAuthStore } from '../../store/auth.store';
 import { useState } from 'react';
+import { PageBackButton } from '../../components/layout/PageBackButton';
 
 type Form = { name: string; email: string; password: string };
 
@@ -30,7 +31,8 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="grid min-h-full place-items-center px-4 py-16">
+        <div className="relative grid min-h-full place-items-center px-4 py-16">
+            <div className="absolute left-4 top-4"><PageBackButton /></div>
             <div className="card w-full max-w-sm p-8">
                 <h1 className="text-xl font-semibold">Create your account</h1>
                 <p className="mt-1 text-sm text-slate-500">Free to start. No credit card required.</p>

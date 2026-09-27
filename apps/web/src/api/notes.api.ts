@@ -46,6 +46,16 @@ export interface ApiSummary {
 }
 
 export const notesApi = {
+    async list(params: { page?: number; limit?: number; favorite?: boolean; mode?: string } = {}) {
+        const res = await api.get('/notes', { params });
+        return res.data.data as {
+            items: ApiNote[];
+            total: number;
+            page: number;
+            limit: number;
+        };
+    },
+
     async getByDocument(documentId: string) {
         const res = await api.get(`/documents/${documentId}/notes`);
         return res.data.data as { note: ApiNote; summary: ApiSummary | null };

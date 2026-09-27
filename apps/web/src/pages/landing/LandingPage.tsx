@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { FileText, UploadCloud, Sparkles, Download, Search, Shield } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
+import { useAuthStore } from '../../store/auth.store';
 
 export default function LandingPage() {
+    const user = useAuthStore((state) => state.user);
+
     return (
         <div className="min-h-full">
             <div className="sticky top-0 z-30">
@@ -18,7 +21,7 @@ export default function LandingPage() {
                     simple, structured notes.
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-3">
-                    <Link to="/register" className="btn-primary">
+                    <Link to={user ? '/app/upload' : '/register'} className="btn-primary">
                         <UploadCloud size={18} /> Upload Your File
                     </Link>
                     <Link to="/demo" className="btn-secondary">See Demo</Link>
@@ -93,6 +96,11 @@ export default function LandingPage() {
             <footer className="border-t border-slate-200 py-10 text-sm text-slate-500 dark:border-slate-800">
                 <div className="mx-auto max-w-6xl px-4 text-center">
                     © 2026 NoteForge AI
+                    <nav aria-label="Legal and help" className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs">
+                        <Link to="/help" className="hover:text-slate-900 dark:hover:text-slate-200">Help</Link>
+                        <Link to="/privacy" className="hover:text-slate-900 dark:hover:text-slate-200">Privacy</Link>
+                        <Link to="/terms" className="hover:text-slate-900 dark:hover:text-slate-200">Terms</Link>
+                    </nav>
                 </div>
             </footer>
         </div>

@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { authApi } from '../../api/auth.api';
 import { useAuthStore } from '../../store/auth.store';
 import { useState } from 'react';
+import { PageBackButton } from '../../components/layout/PageBackButton';
 
 type Form = { email: string; password: string };
 
@@ -31,7 +32,8 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="grid min-h-full place-items-center px-4 py-16">
+        <div className="relative grid min-h-full place-items-center px-4 py-16">
+            <div className="absolute left-4 top-4"><PageBackButton /></div>
             <div className="card w-full max-w-sm p-8">
                 <h1 className="text-xl font-semibold">Welcome back</h1>
                 <p className="mt-1 text-sm text-slate-500">Log in to your NoteForge AI account.</p>
@@ -43,6 +45,7 @@ export default function LoginPage() {
                     <div>
                         <label className="label" htmlFor="password">Password</label>
                         <input id="password" type="password" className="input" autoComplete="current-password" {...register('password', { required: true })} />
+                        <div className="mt-2 text-right"><Link className="text-xs font-medium text-emerald-800 hover:underline" to="/forgot-password">Forgot password?</Link></div>
                     </div>
                     {error && <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">{error}</div>}
                     <button className="btn-primary w-full" disabled={loading || formState.isSubmitting}>
