@@ -3,6 +3,7 @@ dist/
 .env
 .env.*
 !.env.example
+apps/api/.env
 coverage/
 apps/api/temp/*
 !apps/api/temp/.gitkeep
