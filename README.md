@@ -194,6 +194,25 @@ npm run dev:web
 
 Open the web app at [http://localhost:5173](http://localhost:5173). The API defaults to port `5000`; check [http://localhost:5000/api/health](http://localhost:5000/api/health). The Vite proxy forwards `/api` requests to that API.
 
+## Admin Access
+
+There is no separate admin login or default admin account. Register an account at [http://localhost:5173/register](http://localhost:5173/register), then have a trusted database operator grant that account the `admin` role. For a local MongoDB setup, connect to the database configured by `MONGODB_URI`:
+
+```powershell
+mongosh "mongodb://127.0.0.1:27017/noteforge"
+```
+
+In the `mongosh` prompt, replace the email with the registered account's email:
+
+```javascript
+db.users.updateOne(
+	{ email: "admin@example.com", isDeleted: false },
+	{ $set: { role: "admin" } }
+)
+```
+
+Check the result's `matchedCount` is `1`. Then sign in at [http://localhost:5173/login](http://localhost:5173/login); sign out and back in if the account was already signed in. Admin users can open [http://localhost:5173/admin/system](http://localhost:5173/admin/system). Keep database access restricted to trusted operators; do not expose MongoDB credentials in the web app or commit them to the repository.
+
 ## Useful Commands
 
 | Command | Purpose |
